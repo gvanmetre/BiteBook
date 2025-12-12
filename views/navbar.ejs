@@ -1,0 +1,17 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <!-- Icon/Title -->
+    <a href="/find" class="navbar-logo" style="margin-left:0px;">
+      <img src="/images/paul.png" alt="BiteBook" class="logo" >
+      <span class="title">BiteBook</span>
+    </a>
+  </div>
+
+  <div class="navbar-right">
+      <a href="/liked" class="nav-link">Liked Recipes</a>
+      <a href="/recipes" class="nav-link">My Recipes</a>
+      <a href="/recipes/add" class="nav-link">Add Recipe</a>
+      <a href="/user/<%= user._id %>" class="nav-link"><%= user.username %></a>
+  </div>
+  
+</nav>

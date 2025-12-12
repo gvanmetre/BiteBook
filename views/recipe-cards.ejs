@@ -1,0 +1,73 @@
+<% if (recipes.length === 0) { %>
+  <div class="no-results" style="text-align:center; width:100%; padding:40px 0; color:#aaa;">
+    <h2>No recipes here. Try adding one!</h2>
+  </div>
+<% } else { %>
+  <% recipes.forEach(recipe => { %>
+    <div class="recontainer mid card"
+    data-name="<%= recipe.name %>"
+    data-likes="<%= recipe.likes.length %>"
+    data-date="<%= recipe.createdAt %>">
+
+      <!-- Clickable Image -->
+      <div class="image-container" onclick="location.href='/recipes/<%= recipe._id %>'">
+        <img src="<%= recipe.image %>" alt="<%= recipe.name %>">
+      </div>
+
+      <!-- Recipe Name -->
+      <div class="recipe-details">
+        <h3><%= recipe.name %></h3>
+      </div>
+
+      <!-- Recipe Header -->
+      <div class="recipe-header" style="font-size: 0.9em; color: #888; margin-bottom: 5px; text-align: left;">
+        <div>Added by <%= recipe.creator ? recipe.creator.username : 'Unknown' %></div>
+        <div>
+          <% 
+            const created = new Date(recipe.createdAt);
+            const now = new Date();
+            const diffTime = now - created;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) { %>
+              Today at <%= created.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+          <% } else if (diffDays === 1) { %>
+              Yesterday at <%= created.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+          <% } else if (diffDays < 7) { %>
+              <%= created.toLocaleDateString('en-US', { weekday: 'long', hour: '2-digit', minute:'2-digit' }) %>
+          <% } else { %>
+              <%= created.toLocaleDateString('en-US') %> at <%= created.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) %>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Like Button -->
+      <div class="recontainer noborder button-row" style="gap: 10px;">
+        <button class="btn"
+          id="like-btn-<%= recipe._id %>"
+          style="background-color: <%= recipe.likes.includes(user._id) ? '#ff4d4d' : '#555' %>;"
+          onclick="toggleLikeCard('<%= recipe._id %>')"
+        >
+          ❤️ <span id="like-count-<%= recipe._id %>"><%= recipe.likes.length %></span>
+        </button>
+      </div>
+
+      <script>
+        async function toggleLikeCard(recipeId) {
+          const btn = document.getElementById(`like-btn-${recipeId}`);
+          const countSpan = document.getElementById(`like-count-${recipeId}`);
+          const card = btn.closest(".card");
+
+          const res = await fetch(`/recipes/${recipeId}/like`, { method: "POST" });
+          const data = await res.json();
+          if (!data.success) return;
+
+          btn.style.backgroundColor = data.liked ? "#ff4d4d" : "#555";
+          countSpan.textContent = data.likeCount;
+          card.dataset.likes = data.likeCount;
+          applySort();
+        }
+      </script>
+    </div>
+  <% }) %>
+<% } %>
