@@ -1,0 +1,566 @@
+/* style.css */
+
+@font-face {
+  font-family: "Inter Var";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  font-feature-settings: "calt" 0;
+  src: local("Inter Var"), local("Inter Variable"),
+       local("InterVar"), local("InterVariable"),
+       local("Inter"),
+       url("/fonts/Inter-Variable.woff2") format("woff2");
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  font-family: "Inter Var", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+               "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body, html {
+  background-color: #202020;
+  color: white;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+#logo {
+  padding: 20px;
+  max-width: 75%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.container {
+	display: flex;
+	flex-wrap: wrap;
+	max-width: 100%;
+	margin: 20px;
+	position: relative;
+	max-width: 300px;
+	padding: 16px;
+	color: white;
+	font-family: 'Inter Var', sans-serif;
+}
+.error-message {
+	margin-bottom: 15px;
+	color: red;
+}
+.container.mid{
+	border-top: 2px solid #303030;
+	background-color: #404040;
+	box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.2);
+	border-radius: 10px;
+}
+
+.container.bottom {
+	justify-content: center;
+}
+.container.mid.wide {
+	max-width: 700px;
+	text-align: center;
+}
+
+.link-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.link-container h1{
+	padding: 0 0 20px 0;
+	border-bottom: 2px solid #303030;
+}
+
+.link-container a {
+    display: block;
+    padding: 10px 0;
+    color: white;
+    text-decoration: none;
+}
+
+.container.mid.wide a:hover {
+    text-decoration: underline;
+}
+
+.recontainer {
+	display: flex;
+	max-width: 100%;
+	margin: 20px;
+	padding: 16px;
+	color: white;
+	font-family: 'Inter Var', sans-serif;
+	align-items: center;
+	justify-content: center;
+}
+.recontainer.mid {
+	border-top: 2px solid #303030;
+	background-color: #404040;
+	box-shadow: 0px 0px 10px 10px rgba(0,0,0,0.2);
+	border-radius: 10px;
+	max-width: 90%;
+}
+
+.recontainer.noborder{
+	margin: 0px;
+	padding: 5px;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.recontainer.noborder input{
+	width: 100%;
+	margin-top: auto;
+}
+.recontainer.textcontainer {
+	flex: auto;
+  margin: 0px;
+	flex-flow: row wrap;
+	max-width: 100%;
+}
+
+.recontainer.mid.fullcontainer {
+  flex-direction: column;
+  align-items: stretch;
+  max-width: 700px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.recontainer.mid.fullcontainer .text-left {
+  text-align: left;
+  width: 100%;
+}
+
+.recipe-image {
+  max-width: 100%;
+}
+
+.recontainer.full img,
+.recontainer.mid.wide.textcontainer img {
+  max-width: 100% !important;
+  max-height: 600px !important;
+  width: 100% !important;
+  height: auto !important;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  display: block;
+  margin: 0 auto;
+}
+
+.image-container {
+  width: 100%;
+  padding-top: 100%;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid #303030;
+  cursor: pointer;
+  flex: 0 0 50%;
+  border-radius: 10px;
+}
+
+.image-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.recipe-header {
+  margin: 0;
+  font-size: 0.9em;
+  color: #ddd;
+  line-height: 1.3;
+}
+
+
+.recipe-details {
+  padding: 10px;
+  height: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.recipe-details h3 {
+  margin: 0;
+  font-size: 1.1em;
+  line-height: 1.2em;
+  text-align: center;
+  word-wrap: break-word;
+  overflow: hidden;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.recipe-details {
+  flex-grow: 1;
+}
+
+.recipe-details ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.btn {
+  background-color: #1C90ED;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+	width: 180px;
+  opacity: 0.9;
+  border-radius: 10px;
+  font-family: 'Inter Var', sans-serif;
+  font-weight: bold;
+  transition: opacity 0.3s;
+}
+a.btn {
+	text-align: center;
+	color: white;
+	padding: 16px 20px;
+	border: none;
+	cursor: pointer;
+	width: 180px;
+	opacity: 0.9;
+	border-radius: 10px;
+	font-family: 'Inter Var', sans-serif;
+	font-weight: bold;
+	margin: 0 0 5px 5px;
+	background-color: #0078d7;
+    text-decoration: none;
+}
+
+.btn:hover { opacity: 1; }
+.btn.green { background-color: #50b275; }
+.btn.dkred { background-color: #800000; }
+.btn.red { background-color: #e43e31; }
+
+.button-row {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  padding: 10px;
+}
+
+.button-row .btn {
+  flex: none;
+}
+.like-btn {
+  background-color: #ff3366;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+.like-btn:hover {
+  background-color: #ff1a4d;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #333333;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar a { text-decoration: none; color: #fff; margin-left: 15px; font-weight: 500; }
+.navbar a:hover { color: #f1c40f; }
+.navbar-logo {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo .logo {
+  width: 30px;
+  height: 30px;
+  margin-right: 8px;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.recontainer.mid.cardcontainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.recontainer.mid.card {
+  width: 250px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  background-color: #404040;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 20px;
+}
+
+.recontainer.mid.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+}
+
+.recontainer.mid.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #303030;
+  display: block;
+}
+
+
+.login-page { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; }
+.btn-container { display: flex; justify-content: center; width: 100%; }
+.filter-content { overflow: hidden; max-height: 1000px; transition: max-height 0.4s ease; width: 100%; }
+.filter-content.hidden { max-height: 0; padding: 0; overflow: hidden; }
+
+.filter-header {
+  background-color: #303030;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+.filter-item {
+  flex: 1;
+  display: flex; 
+  flex-direction: column;
+}
+
+.filter-input,
+.sort-select {
+  width: 100%;
+  padding: 10px;
+  min-width: 250px;
+  margin: 0;
+  background: #505050;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Inter Var', sans-serif;
+  font-size: 1em;
+  height: 45px;
+  box-sizing: border-box;
+}
+
+.filter-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 10px;
+  align-items: stretch;
+}
+
+.filter-row .filter-item input,
+.filter-row .filter-item select {
+    margin: 0;
+}
+
+.sort-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.tag-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 10px;
+  background: #505050;
+  border-radius: 10px;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.tag-input-container input {
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0;
+  font-family: 'Inter Var', sans-serif;
+  font-size: 1em;
+  min-height: 20px;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  height: 30px;
+  background: #1C90ED;
+  color: white;
+  border-radius: 15px;
+  padding: 10px;
+  font-size: 0.9em;
+  gap: 5px;
+}
+
+.tag .remove-tag {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#ingredients-container, #type-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  border-radius: 10px;
+  background: #505050;
+  padding: 8px 10px;
+  align-items: center;
+  height: 45px;
+  box-sizing: border-box;
+}
+
+#ingredients-container input,
+#type-container input {
+  background: transparent;
+  border: none;
+  color: white;
+  flex: 1;
+  padding: 5px;
+  font-family: 'Inter Var', sans-serif;
+  font-size: 1em;
+}
+.autocomplete-item {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.autocomplete-item:hover {
+  background: #666;
+}
+
+.autocomplete-dropdown {
+  max-height: 200px;
+  overflow-y: auto;
+  border-radius: 4px;
+}
+
+/* Base themed input */
+.themed-input {
+  padding: 15px;
+  border: none;
+  background: #505050;
+  color: white;
+  margin: 5px 0 22px 0;
+  font-family: 'Inter Var', sans-serif;
+}
+
+/* Ingredient name and unit: rounded corners */
+#ingredient-name {
+  border-radius: 10px 0 0 10px;
+  flex: 2.3;
+}
+
+#ingredient-amount {
+  border-radius: 0;
+  border-left: 1px solid #777;
+  border-right: 1px solid #777;
+  text-align: left;
+  flex: .5;
+}
+
+#ingredient-unit {
+  border-radius: 0 10px 10px 0;
+  width: 120px;
+}
+
+#add-ingredient-btn { 
+  flex: 0 0 auto; 
+  background-color:#0078d7; 
+  margin-left: 10px;
+  flex:0;
+}
+
+/*  Mobile */
+@media (max-width: 600px) {
+  .filter-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .filter-item input.filter-input,
+  .filter-item select.sort-select,
+  #ingredients-container {
+    font-size: 0.9em;
+    height: 35px;
+    padding: 5px 8px;
+  }
+
+  #ingredients-container {
+    min-height: 35px;
+  }
+
+  .tag {
+    font-size: 0.8em;
+    padding: 3px 7px;
+    border-radius: 12px;
+  }
+
+  .navbar {
+    padding: 6px 12px;
+  }
+
+  .navbar a {
+    font-size: 0.9em;
+    margin-left: 10px;
+  }
+
+  .navbar-logo .logo {
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
+  }
+
+  .navbar-right {
+    gap: 8px;
+  }
+
+  .navbar span,
+  .navbar div,
+  .navbar .username {
+    font-size: 0.9em;
+  }
+}
