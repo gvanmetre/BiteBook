@@ -1,0 +1,59 @@
+<div class="recontainer mid wide" style="flex-direction: column; align-items: stretch;">
+  <h2 style="text-align: center; margin-bottom: 20px;">Profile Settings</h2>
+
+  <% if (error) { %>
+    <div class="error-message"><%= error %></div>
+  <% } %>
+
+  <% if (success) { %>
+    <div style="margin-bottom:15px; color: #50b275;"><%= success %></div>
+  <% } %>
+
+  <div style="margin-bottom: 5px;">
+    <p><b>Username:</b> <%= user.username %></p>
+  </div>
+
+  <form action="/profile" method="POST" enctype="multipart/form-data" style="display:flex; flex-direction:column;">
+  
+    <div style="margin-bottom: 15px;">
+      <% if (user.avatar) { %>
+        <img src="<%= user.avatar %>" alt="Avatar" 
+             style="width:100px; height:100px; object-fit:cover; border-radius:12px; border:2px solid #666; margin-bottom:10px;">
+      <% } else { %>
+        <div style="width:100px; height:100px; background:#333; color:#aaa; display:flex; align-items:center; justify-content:center; border-radius:12px; margin-bottom:10px;">
+          No Avatar
+        </div>
+      <% } %>
+    </div>
+  
+    <div>
+      <label for="avatar">Upload Avatar:</label>
+      <input type="file" id="avatar" name="avatar" accept="image/*" style="width: 100%; margin-bottom: 10px; margin-top:5px;">
+    </div>
+  
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" value="<%= user.email %>" required style="width: 100%; padding: 8px; margin-top:5px;">
+    </div>
+    
+    <div>
+      <label for="currentPassword">Current Password:</label>
+      <input type="password" id="currentPassword" name="currentPassword" placeholder="Enter current password" required style="width: 100%; padding: 8px; margin-top:5px;">
+    </div>
+  
+    <div>
+      <label for="newPassword">New Password:</label>
+      <input type="password" id="newPassword" name="newPassword" placeholder="Enter new password" style="width: 100%; padding: 8px; margin-top:5px;">
+    </div>
+  
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px;">
+      <button type="submit" class="btn">Update Profile</button>
+      <button type="button" class="btn red" onclick="location.href='/logout'">Logout</button>
+      <% if (user.admin) { %>
+        <button type="button" class="btn blue" onclick="location.href='/admin'">
+          Admin Dashboard
+        </button>
+      <% } %>
+    </div>
+  </form>
+</div>

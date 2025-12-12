@@ -1,0 +1,36 @@
+<div class="recontainer mid wide" style="flex-direction: column; align-items: stretch;">
+
+  <h2 style="text-align:center; margin-bottom:20px;"><%= profile.username %>'s Profile</h2>
+
+  <div style="text-align:center; margin-bottom:20px;">
+    <% if(profile.avatar) { %>
+      <img src="<%= profile.avatar %>" alt="<%= profile.username %>" 
+           style="width:120px; height:120px; object-fit:cover; border-radius:12px; border:2px solid #666;">
+    <% } else { %>
+      <div style="width:120px; height:120px; background:#333; color:#aaa; display:flex; justify-content:center; align-items:center; border-radius:12px;">
+        N/A
+      </div>
+    <% } %>
+  </div>
+  <% if(user && user._id.toString() === profile._id.toString()) { %>
+    <div style="text-align:center; margin-bottom:20px;">
+      <button class="btn blue" onclick="location.href='/user/edit/<%= profile._id %>'">Edit Profile</button>
+      <button type="button" class="btn red" onclick="location.href='/logout'">Logout</button>
+    </div>
+  <% } %>
+
+  <div style="text-align:center; color:#ccc; margin-bottom:20px;">
+    <% if(profile.bio) { %>
+      <p><b>Bio:</b> <%= profile.bio %></p>
+    <% } %>
+  </div>
+
+  <div class="recontainer textcontainer" style="flex-direction: column; width: 100%;">
+
+    <h2 style="margin-top: 5px; margin-bottom: 15px; text-align:center;">
+      <%= profile.username %>'s Public Recipes
+    </h2> 
+    <div id="recipes" class="recontainer mid cardcontainer" style="width: 1200px; border:0px; box-shadow: 0px 0px 0px 0px rgba(0,0,0,0);">
+      <%- include('../recipe-cards', { recipes: recipes }) %>
+    </div>
+</div>

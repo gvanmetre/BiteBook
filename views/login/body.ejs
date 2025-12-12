@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>blart login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/styles/style.css">
+	<link rel="stylesheet" href="/styles/login.css">
+</head>
+	<body>
+		<main>
+			<div class="login-page">
+        <form action="/login" method="POST" class="container mid">
+          <label for="username"><b>Username</b></label>
+          <input type="text" placeholder="Enter Username" name="username" required>      
+          <label for="password"><b>Password</b></label>
+          <input type="password" placeholder="Enter Password" name="password" required>
+          <% if (failureMessage) { %>
+            <div class="error-message"><%= failureMessage %></div>
+          <% } %>
+          <div class="btn-container">
+            <button type="submit" class="btn">Login</button>
+          </div>
+        </form>
+        <div class="container bottom">
+          <p>Need an account?</p>
+          <button type="button" class="btn green" onclick="location.href='/register'">Register</button>
+        </div>
+      </div>
+		</main>
+	</body>
+</html>

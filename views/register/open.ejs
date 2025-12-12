@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>blart registration</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="/styles/style.css">
+	<link rel="stylesheet" href="/styles/login.css">	
+</head>
+	<body>
+		<main>
+			<div>
+				<form action="/register" method="POST" class="container mid">
+				<label for="username"><b>Username</b></label>
+				<input type="text" placeholder="Enter Username" name="username" required>
+				<label for="email"><b>Email</b></label>
+				<input type="text" placeholder="Enter Email" name="email" required>
+				<label for="password"><b>Password</b></label>
+				<input type="password" placeholder="Enter Password" name="password" required>
+				<label for="pswConfirm"><b>Confirm Password</b></label>
+				<input type="password" placeholder="Confirm Password" name="pswConfirm" required>
+				<% if (registrationError) { %>
+					<div class="error-message">
+						<%= registrationError %>
+					</div>
+				<% } %>
+				<button type="submit" class="btn">Register</button>
+				</form>
+				<div class="container bottom">
+					<p style="center">Have an account?</p>
+					<button type="button" class="btn green" onclick="location.href='/login'">Login</button>
+				</div>
+			</div> 
+		</main>
+	</body>
+</html>

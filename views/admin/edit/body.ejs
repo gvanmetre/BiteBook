@@ -1,0 +1,163 @@
+<%
+  function truncate(text, max=150) {
+    if (!text) return "";
+    return text.length > max ? text.slice(0, max) + "..." : text;
+  }
+%>
+<div class="recontainer mid wide" style="flex-direction: column;">
+  <h2>Edit User: <%= editUser.username %></h2>
+  <% if (editUser.avatar) { %>
+    <img src="<%= editUser.avatar %>" alt="Avatar" 
+        style="width:80px; height:80px; border-radius:8px; object-fit:cover; border:2px solid #666;">
+  <% } else { %>
+    <div style="width:80px; height:80px; background:#333; color:#aaa; display:flex; 
+                justify-content:center; align-items:center; border-radius:8px;">
+      No Avatar
+    </div>
+  <% } %>
+
+  <form action="/admin/edit/<%= editUser._id %>" 
+    method="POST" 
+    enctype="multipart/form-data"
+    style="margin-bottom: 30px;">
+
+    <label>Username:</label>
+    <input type="text" name="username" value="<%= editUser.username %>" required>
+
+    <label>Email:</label>
+    <input type="email" name="email" value="<%= editUser.email %>" required>
+
+    <label style="margin-bottom: 15px;">User Avatar:</label>
+    <input type="file" name="avatar" accept="image/*" style="margin-bottom: 15px;">
+
+    <% if (editUser.avatar) { %>
+      <label><input type="checkbox" style="margin-bottom: 15px;" name="removeAvatar" value="true"> Remove avatar</label>
+    <% } %>
+
+    <label>Admin: <input type="checkbox" style="margin-bottom: 15px;" name="admin" value="true" <%= editUser.admin ? 'checked' : '' %>></label>
+  
+    <label>Temporary Suspension (days):</label>
+    <input type="text" name="suspendDays" min="0" placeholder="0 = no suspension">
+
+    <button type="submit" class="btn blue">Save Changes</button>
+
+  </form>
+
+  <h3><%= editUser.username %>'s Recipes</h3>
+
+  <% if (editUser.recipes.length === 0) { %>
+    <p>No recipes found for this user.</p>
+  <% } else { %>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+      <thead>
+        <tr>
+          <th style="border: 1px solid #ccc; padding: 5px; text-align: left;" >Recipe Name</th>
+          <th style="border: 1px solid #ccc; padding: 5px; width: 225px;">Date</th>
+          <th style="border: 1px solid #ccc; padding: 5px; width: 225px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% editUser.recipes.forEach(recipe => { %>
+          <tr>
+            <td style="
+              border: 1px solid #ccc; 
+              padding: 5px; 
+              max-width: 250px;
+              overflow-wrap: break-word;
+              word-break: break-word;
+            ">
+              <a href="/recipes/<%= recipe._id %>" style="color:#4da3ff; text-decoration:none; text-align: left;">
+                <%= truncate(recipe.name, 150) %>
+              </a>
+            </td>
+            <td style="border: 1px solid #ccc; padding: 5px; text-align:center; "><%= new Date(recipe.createdAt).toLocaleString() %></td>
+            <td style="border: 1px solid #ccc; padding: 5px; text-align:center; ">
+              <button class="btn blue" style="width: 100px;" onclick="location.href='/recipes/edit/<%= recipe._id %>'">Edit</button>
+              <form action="/recipes/delete/<%= recipe._id %>" method="POST" style="display:inline;">
+                <button class="btn red" style="width: 100px;" type="submit" onclick="return confirm('Delete this recipe?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+
+
+  <h3><%= editUser.username %>'s Comment History</h3>
+
+  <% if (userComments.length === 0) { %>
+    <p>No comments posted by this user.</p>
+  <% } else { %>
+    <table style="width:100%; border-collapse:collapse;">
+      <thead>
+        <tr>
+          <th style="border: 1px solid #ccc; padding: 5px;">Comment</th>
+          <th style="border: 1px solid #ccc; padding: 5px; width: 225px;">Date</th>
+          <th style="border: 1px solid #ccc; padding: 5px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% userComments.forEach(c => { %>
+          <tr id="comment-row-<%= c._id %>">
+            <td id="comment-text-<%= c._id %>" style="border: 1px solid #ccc; padding: 5px; text-align:center; max-width: 500px; overflow-wrap: break-word; word-break: break-word;">
+              <a style="color:#4da3ff; text-decoration:none;" href="/recipes/<%= c.recipeId %>"><%= truncate(c.text, 150) %></a>
+            </td>
+            <td style="border: 1px solid #ccc; padding: 5px; text-align:center; "><%= new Date(c.createdAt).toLocaleString() %></td>
+  
+            <td style="border: 1px solid #ccc; padding: 5px; text-align:center; width: 225px;">
+              <button onclick="editAdminComment('<%= c.recipeId %>', '<%= c._id %>')" class="btn blue" style="width: 100px;">Edit</button>
+  
+              <form action="/admin/comment/delete/<%= c.recipeId %>/<%= c._id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn red" style="width: 100px;" onclick="deleteAdminComment('<%= c.recipeId %>', '<%= c._id %>')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>
+
+<script>
+function editAdminComment(recipeId, commentId) {
+  const p = document.getElementById(`comment-text-${commentId}`);
+  const oldText = p.textContent.trim();
+  const newText = prompt("Edit comment:", oldText);
+  if (!newText || !newText.trim()) return;
+
+  fetch(`/recipes/${recipeId}/comments/${commentId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+    body: JSON.stringify({ text: newText })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      p.textContent = newText;
+    } else {
+      alert("Failed to update comment: " + (data.error || "Unknown error"));
+    }
+  })
+  .catch(err => console.error(err));
+}
+
+function deleteAdminComment(recipeId, commentId) {
+  if (!confirm("Delete this comment?")) return;
+
+  fetch(`/recipes/${recipeId}/comments/${commentId}`, {
+    method: 'DELETE',
+    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      const row = document.getElementById(`comment-row-${commentId}`);
+      row.remove();
+    } else {
+      alert("Failed to delete comment: " + (data.error || "Unknown error"));
+    }
+  })
+  .catch(err => console.error(err));
+}
+</script>

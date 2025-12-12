@@ -1,0 +1,185 @@
+<div class="recontainer mid wide" style="flex-direction: column;">
+  <h2>Admin: User Management</h2>
+
+  <input 
+    type="text" 
+    id="userSearch" 
+    placeholder="Search username or Email..."
+    style="margin-bottom: 15px; padding: 8px; width: 250px;"
+  >
+
+  <div style="margin-bottom: 10px; display: flex; gap: 20px; align-items: center;">
+  
+    <div>
+      Show:
+      <select id="pageSize" style="padding: 5px;">
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+      </select>
+      users per page
+    </div>
+  
+    <div>
+      Sort:
+      <select id="sortOption" style="padding: 5px;">
+        <option value="nameAsc" selected>Name A → Z</option>
+        <option value="nameDesc">Name Z → A</option>
+        <option value="newest">Newest First</option>
+        <option value="oldest">Oldest First</option>
+      </select>
+    </div>
+  
+  </div>
+  
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th>Admin</th>
+        <th>Active</th>
+        <th>Date Created</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody id="userTableBody">
+      <% users.forEach(u => { %>
+        <tr data-created="<%= u.createdAt ? u.createdAt.toISOString() : '' %>">
+          <td><%= u.username %></td>
+          <td><%= u.email %></td>
+          <td><%= u.admin ? 'Yes' : 'No' %></td>
+          <td><%= u.active !== false ? 'Yes' : 'No' %></td>
+          <td><%= u.createdAt.toLocaleDateString() %></td>
+          <td>
+            <button onclick="location.href='/admin/edit/<%= u._id %>'">Edit</button>
+            <form action="/admin/delete/<%= u._id %>" method="POST" style="display:inline;">
+              <button type="submit" onclick="return confirm('Delete this user?')">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>    
+  </table>
+
+  <div id="paginationControls" style="margin-top: 15px; display: flex; gap: 10px;"></div>
+</div>
+
+<script>
+  const tbody = document.getElementById('userTableBody');
+  const rows = Array.from(tbody.querySelectorAll('tr'));
+  const searchInput = document.getElementById('userSearch');
+  const pageSizeSelect = document.getElementById('pageSize');
+  const paginationControls = document.getElementById('paginationControls');
+  const sortSelect = document.getElementById('sortOption');
+
+  let filteredRows = rows.slice();
+  let currentPage = 1;
+
+  // Use dataset.created (ISO) if present; fallback to parsing the visible date cell
+  function getRowDate(row) {
+    const iso = row.dataset.created;
+    if (iso) return new Date(iso);
+    const cell = row.querySelector('td:nth-child(5)');
+    return new Date(cell ? cell.textContent : 0);
+  }
+
+  function applySorting() {
+    const option = sortSelect.value;
+
+    filteredRows.sort((a, b) => {
+      const nameA = a.querySelector('td:nth-child(1)').textContent.trim().toLowerCase();
+      const nameB = b.querySelector('td:nth-child(1)').textContent.trim().toLowerCase();
+      const dateA = getRowDate(a);
+      const dateB = getRowDate(b);
+
+      switch (option) {
+        case 'nameAsc':
+          return nameA.localeCompare(nameB);
+        case 'nameDesc':
+          return nameB.localeCompare(nameA);
+        case 'newest':
+          return dateB - dateA;
+        case 'oldest':
+          return dateA - dateB;
+        default:
+          return 0;
+      }
+    });
+  }
+
+  function renderTable() {
+    const pageSize = parseInt(pageSizeSelect.value, 10);
+    const totalPages = Math.max(1, Math.ceil(filteredRows.length / pageSize));
+
+    // clamp current page
+    if (currentPage > totalPages) currentPage = totalPages;
+    if (currentPage < 1) currentPage = 1;
+
+    // Clear tbody then append rows in the correct order for this page
+    tbody.innerHTML = '';
+
+    const start = (currentPage - 1) * pageSize;
+    const end = start + pageSize;
+    const pageRows = filteredRows.slice(start, end);
+
+    pageRows.forEach(row => {
+      tbody.appendChild(row); // moves existing element into place
+      row.style.display = ''; // ensure visible
+    });
+
+    paginationControls.innerHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+      const btn = document.createElement('button');
+      btn.textContent = i;
+      btn.style.padding = "6px 12px";
+      btn.style.background = i === currentPage ? "#4285f4" : "#ddd";
+      btn.style.color = i === currentPage ? "#fff" : "#000";
+      btn.style.border = "none";
+      btn.style.borderRadius = "4px";
+      btn.style.cursor = "pointer";
+
+      btn.addEventListener('click', () => {
+        currentPage = i;
+        renderTable();
+      });
+
+      paginationControls.appendChild(btn);
+    }
+  }
+
+  function applyFilter() {
+    const filter = (searchInput.value || '').trim().toLowerCase();
+
+    if (!filter) {
+      filteredRows = rows.slice();
+    } else {
+      filteredRows = rows.filter(row => {
+        const username = (row.querySelector('td:nth-child(1)')?.textContent || '').toLowerCase();
+        const email = (row.querySelector('td:nth-child(2)')?.textContent || '').toLowerCase();
+        return username.includes(filter) || email.includes(filter);
+      });
+    }
+
+    applySorting();
+    currentPage = 1;
+    renderTable();
+  }
+
+  searchInput.addEventListener('input', applyFilter);
+
+  pageSizeSelect.addEventListener('change', () => {
+    currentPage = 1;
+    renderTable();
+  });
+
+  sortSelect.addEventListener('change', () => {
+    applySorting();
+    currentPage = 1;
+    renderTable();
+  });
+
+  applySorting();
+  renderTable();
+</script>

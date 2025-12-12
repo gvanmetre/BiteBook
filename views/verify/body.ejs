@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>blart verification</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="/styles/style.css">
+	<link rel="stylesheet" href="/styles/login.css">
+
+</head>
+	<body>
+		<main>
+			<div class="container mid wide">
+
+				<% if (verifyMessage) { %>
+				<h2>
+				<%= verifyMessage %>
+				</h2>
+				<% } %>
+	
+			</div>
+			<div>
+				<div class="container bottom">
+				<button type="button" class="btn dkred" onclick="location.href='/logout'">Logout</button>
+				</div>
+			</div>
+		</main>
+	</body>
+</html>
+		
