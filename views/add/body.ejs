@@ -1,0 +1,187 @@
+<!-- /views/add/body.ejs -->
+
+<div class="recontainer mid">
+    <div class="recontainer textcontainer">
+      <form action="/recipes/add" method="post" enctype="multipart/form-data" class="form-grid">
+  
+        <div class="form-column">
+          <label for="name">Dish Name:</label>
+          <input type="text" placeholder="Mac and Cheese" id="name" name="name" required>
+  
+          <label for="type">Type:</label>
+          <input type="text" placeholder="Entree/Side/Dessert" id="type" name="type" required>
+  
+          <!-- Required Nutrition Fields -->
+          <label for="calories">Calories:</label>
+          <input type="text" id="calories" placeholder="Number of Calories" name="calories" required>
+  
+          <label for="carbs">Carbs (g):</label>
+          <input type="text" id="carbs" placeholder="Number of Grams" name="carbs" required>
+  
+          <label for="fat">Fat (g):</label>
+          <input type="text" id="fat" placeholder="Number of Grams" name="fat" required>
+  
+          <label for="protein">Protein (g):</label>
+          <input type="text" id="protein" placeholder="Number of Grams" name="protein" required>
+  
+          <!-- Optional Nutrition Fields -->
+          <label for="fiber">Fiber (g):</label>
+          <input type="text" id="fiber" placeholder="Grams" name="fiber">
+  
+          <label for="sugar">Sugar (g):</label>
+          <input type="text" id="sugar" placeholder="Grams" name="sugar">
+  
+          <label for="saturatedFat">Saturated Fat (g):</label>
+          <input type="text" id="saturatedFat" placeholder="Grams" name="saturatedFat">
+  
+          <label for="transFat">Trans Fat (g):</label>
+          <input type="text" id="transFat" placeholder="Grams" name="transFat">
+  
+          <label for="sodium">Sodium (mg):</label>
+          <input type="text" id="sodium" placeholder="mg" name="sodium">
+  
+          <label for="potassium">Potassium (mg):</label>
+          <input type="text" id="potassium" placeholder="mg" name="potassium">
+  
+          <label for="cholesterol">Cholesterol (mg):</label>
+          <input type="text" id="cholesterol" placeholder="mg" name="cholesterol">
+  
+          <label for="calcium">Calcium (mg):</label>
+          <input type="text" id="calcium" placeholder="mg" name="calcium">
+  
+          <label for="iron">Iron (mg):</label>
+          <input type="text" id="iron" placeholder="mg" name="iron">
+  
+          <label for="servings">Servings:</label>
+          <input type="text" id="servings" placeholder="Number of servings" name="servings">
+  
+          <label for="servingSize">Serving Size:</label>
+          <input type="text" id="servingSize" placeholder="Example: 1 slice, 1 cup" name="servingSize">
+  
+          <label for="instructions">Instructions:</label>
+          <textarea id="instructions" name="instructions" placeholder="Enter instructions" class="default-textarea"></textarea>
+        </div>
+  
+        <!-- Ingredients Widget -->
+        <div id="ingredient-widget" class="form-column" style="margin-bottom: 20px;">
+          <label>Ingredients:</label>
+          <div style="display: flex; gap: 0; margin-bottom: 10px;">
+            <input type="text" id="ingredient-name" placeholder="Ingredient" class="themed-input ingredient-name">
+            <input type="text" id="ingredient-amount" placeholder="Amount" class="themed-input ingredient-amount">
+            <select id="ingredient-unit" class="themed-input">
+              <option value="">—</option>
+              <option value="g">g</option>
+              <option value="mg">mg</option>
+              <option value="oz">oz</option>
+              <option value="cup">cup</option>
+              <option value="tsp">tsp</option>
+              <option value="tbsp">tbsp</option>
+              <option value="ct">ct</option>
+              <option value="custom">Custom</option>
+            </select>
+            <input type="text" id="custom-unit-input" class="themed-input" placeholder="Enter custom unit" style="display:none; margin-left: 10px;">
+            <button type="button" id="add-ingredient-btn" class="btn blue themed-input">+</button>
+          </div>
+  
+          <div id="ingredient-tag-container" class="tag-input-container"></div>
+          <input type="hidden" id="ingredients-json" name="ingredients">
+        </div>
+  
+        <div class="form-row">
+          <label>Public: <input type="checkbox" id="public" name="public"></label>
+          <label for="image">Image:</label>
+          <input type="file" id="image" name="image" accept=".png,.jpg,.jpeg,.webp,.gif" required>
+        </div>
+  
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="btn red" onclick="{ location.href='/' }">Cancel</button>
+          <button class="btn blue" id="addRecipe" type="submit">Add New Recipe</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script>
+    const numericFields = [
+      'calories','carbs','fat','protein','fiber','sugar',
+      'saturatedFat','transFat','sodium','potassium','cholesterol','calcium','iron','servings'
+    ];
+    numericFields.forEach(id => {
+      const input = document.getElementById(id);
+      if(input){
+        input.addEventListener('input', e => {
+          e.target.value = e.target.value.replace(/[^0-9.]/g,'');
+        });
+      }
+    });
+  
+    const ingredientContainer = document.getElementById("ingredient-tag-container");
+    const ingredientHidden = document.getElementById("ingredients-json");
+    const ingredientNameInput = document.getElementById("ingredient-name");
+    const ingredientAmountInput = document.getElementById("ingredient-amount");
+    const ingredientUnitSelect = document.getElementById("ingredient-unit");
+    const customUnitInput = document.getElementById("custom-unit-input");
+    const addButton = document.getElementById("add-ingredient-btn");
+  
+    let ingredients = [];
+  
+    function updateHiddenField() {
+      ingredientHidden.value = JSON.stringify(ingredients);
+    }
+  
+    function createIngredientTag(obj, index) {
+      const tag = document.createElement("div");
+      tag.className = "tag";
+      const unitPart = obj.unit || "";
+      const amountUnit = `${obj.amount}${unitPart}`;
+      tag.innerHTML = `${amountUnit} ${obj.name} <span class="remove-tag" data-index="${index}">×</span>`;
+      tag.querySelector(".remove-tag").onclick = () => {
+        ingredients.splice(index,1);
+        renderTags();
+      };
+      return tag;
+    }
+  
+    function renderTags() {
+      ingredientContainer.innerHTML = "";
+      ingredients.forEach((ing,i)=>ingredientContainer.appendChild(createIngredientTag(ing,i)));
+      updateHiddenField();
+    }
+  
+    ingredientUnitSelect.addEventListener("change", ()=>{
+      if(ingredientUnitSelect.value==="custom"){
+        customUnitInput.style.display="block";
+        customUnitInput.focus();
+      } else {
+        customUnitInput.style.display="none";
+        customUnitInput.value="";
+      }
+    });
+  
+    addButton.addEventListener("click", ()=>{
+      const name = ingredientNameInput.value.trim();
+      const amount = parseFloat(ingredientAmountInput.value.trim());
+      let unit = ingredientUnitSelect.value;
+  
+      if(!name || isNaN(amount)){
+        alert("Please enter a valid ingredient and numeric amount.");
+        return;
+      }
+  
+      if(unit==="custom"){
+        unit = customUnitInput.value.trim();
+        if(!unit){ alert("Please enter custom unit."); return; }
+      }
+  
+      ingredients.push({ name, amount, unit });
+      renderTags();
+  
+      // clear inputs
+      ingredientNameInput.value="";
+      ingredientAmountInput.value="";
+      ingredientUnitSelect.value="";
+      customUnitInput.value="";
+      customUnitInput.style.display="none";
+    });
+  </script>
+  

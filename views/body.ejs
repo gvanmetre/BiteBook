@@ -1,0 +1,54 @@
+<div class="recontainer textcontainer" style="flex-direction: column; width: 100%;">
+  <h2>Welcome to BiteBook, <%- user.username %>!</h2>
+
+  <div class="recontainer mid" style="flex-direction: column; width: 100%;">
+	<div class="recontainer noborder filter-name-container" style="width: 100%;">
+		<input type="text" id="name" placeholder="Filter by Name" oninput="filterRecipes()" style="width: 100%;">
+	</div>
+
+    <div id="advancedFilters" class="filter-content hidden" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; width: 100%;">
+      
+      <div class="filter-item">
+        <input type="text" id="creator" placeholder="Filter by Creator" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="ingredients" placeholder="Filter by Ingredient" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="type" placeholder="Filter by Type" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="caloriesLessThan" placeholder="Filter by < Calories" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="caloriesGreaterThan" placeholder="Filter by > Calories" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="fatLessThan" placeholder="Filter by < Fat (Grams)" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="fatGreaterThan" placeholder="Filter by > Fat (Grams)" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="carbsLessThan" placeholder="Filter by < Carbs (Grams)" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="carbsGreaterThan" placeholder="Filter by > Carbs (Grams)" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="proteinLessThan" placeholder="Filter by < Protein (Grams)" oninput="filterRecipes()">
+      </div>
+      <div class="filter-item">
+        <input type="text" id="proteinGreaterThan" placeholder="Filter by > Protein (Grams)" oninput="filterRecipes()">
+      </div>
+    </div>
+    
+    <div class="filter-header" onclick="toggleFilters()">
+      <h3 id="filterTitle" style="margin: 0; cursor: pointer;">Advanced Filters ▶</h3>
+    </div>
+  </div>
+
+  <div id="recipes" class="recontainer mid cardcontainer">
+    <%- include('../recipe-cards', { recipes: recipes }) %>
+  </div>
+</div>

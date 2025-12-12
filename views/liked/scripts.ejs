@@ -1,0 +1,18 @@
+<script type="text/javascript" src="js/filterRecipesLiked.js"></script>
+<script src="js/sort.js" defer></script>
+<script src="js/filterIngredient.js" defer></script>
+<script src="js/filterType.js" defer></script>
+<script>
+  const allRecipes = <%- JSON.stringify(recipes) %>;
+</script>
+<script>
+  function toggleFilters() {
+    const filterContainer = document.getElementById("advancedFilters");
+    const title = document.getElementById("filterTitle");
+
+    filterContainer.classList.toggle("hidden");
+    title.textContent = filterContainer.classList.contains("hidden")
+      ? "Advanced Filters ▶"
+      : "Advanced Filters ▼";
+  }
+</script>
